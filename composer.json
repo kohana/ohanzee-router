@@ -1,0 +1,35 @@
+{
+	"name": "ohanzee/router",
+	"description": "Routing Library inspired by the Kohana Routing Syntax",
+	"homepage": "http://ohanzee.org/component/router",
+	"license": "BSD-2-Clause",
+	"keywords": ["kohana", "ohanzee", "components", "router"],
+	"authors": [
+		{
+			"name": "Kohana/Ohanzee Team",
+			"email": "team@kohanaframework.org",
+			"homepage": "http://ohanzee.org"
+		},
+		{
+			"name": "Ohanzee Contributors",
+			"homepage": "http://github.com/kohana/ohanzee-router/contributors"
+		}
+
+	],
+	"support": {
+		"source": "http://github.com/kohana/ohanzee-router",
+		"issues": "http://github.com/kohana/ohanzee-router/issues",
+		"irc": "irc://irc.freenode.net/kohana"
+	},
+	"autoload": {
+		"psr-4": {
+			"Ohanzee\\Router\\": "src/"
+		}
+	},
+	"require": {
+		"php": ">=5.4.0"
+	},
+	"require-dev": {
+		"phpspec/phpspec": "2.0.*@dev"
+	}
+}
