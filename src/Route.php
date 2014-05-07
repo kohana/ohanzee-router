@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') OR die('No direct script access.');
+<?php
 
 /**
  * @package    Ohanzee
@@ -7,33 +7,6 @@
  * @link       http://ohanzee.org/
  * @license    http://ohanzee.org/license
  * @version    0.1.0
- *
- * Routes are used to determine the controller and action for a requested URI.
- * Every route generates a regular expression which is used to match a URI
- * and a route. Routes may also contain keys which can be used to set the
- * controller, action, and parameters.
- *
- * Each <key> will be translated to a regular expression using a default
- * regular expression pattern. You can override the default pattern by providing
- * a pattern for the key:
- *
- *     // This route will only match when <id> is a digit
- *     Route::set('user', 'user/<action>/<id>', array('id' => '\d+'));
- *
- *     // This route will match when <path> is anything
- *     Route::set('file', '<path>', array('path' => '.*'));
- *
- * It is also possible to create optional segments by using parentheses in
- * the URI definition:
- *
- *     // This is the standard default route, and no keys are required
- *     Route::set('default', '(<controller>(/<action>(/<id>)))');
- *
- *     // This route only requires the <file> key
- *     Route::set('file', '(<path>/)<file>(.<format>)', array('path' => '.*', 'format' => '\w+'));
- *
- * Routes also provide a way to generate URIs (called "reverse routing"), which
- * makes them an extremely powerful and flexible way to generate internal links.
  */
 namespace Ohanzee\Router;
 
@@ -64,21 +37,6 @@ class Route {
 	 */
 	protected $_route_regex;
 
-	/**
-	 * Creates a new route. Sets the URI and regular expressions for keys.
-	 * Routes should always be created with [Route::set] or they will not
-	 * be properly stored.
-	 *
-	 *     $route = new Route($uri, $regex);
-	 *
-	 * The $uri parameter should be a string for basic regex matching.
-	 *
-	 *
-	 * @param   string  $uri    route URI pattern
-	 * @param   array   $regex  key patterns
-	 * @return  void
-	 * @uses    Route::_compile
-	 */
 	public function __construct($uri = NULL, $regex = NULL)
 	{
 		if ($uri === NULL)
@@ -101,20 +59,6 @@ class Route {
 		$this->_route_regex = Route::compile($uri, $regex);
 	}
 
-	/**
-	 * Provides default values for keys when they are not present. The default
-	 * action will always be "index" unless it is overloaded here.
-	 *
-	 *     $route->defaults(array(
-	 *         'controller' => 'welcome',
-	 *         'action'     => 'index'
-	 *     ));
-	 *
-	 * If no parameter is passed, this method will act as a getter.
-	 *
-	 * @param   array   $defaults   key values
-	 * @return  $this or array
-	 */
 	public function defaults(array $defaults = NULL)
 	{
 		if ($defaults === NULL)
@@ -127,34 +71,6 @@ class Route {
 		return $this;
 	}
 
-	/**
-	 * Filters to be run before route parameters are returned:
-	 *
-	 *     $route->filter(
-	 *         function(Route $route, $params, Request $request)
-	 *         {
-	 *             if ($request->method() !== HTTP_Request::POST)
-	 *             {
-	 *                 return FALSE; // This route only matches POST requests
-	 *             }
-	 *             if ($params AND $params['controller'] === 'welcome')
-	 *             {
-	 *                 $params['controller'] = 'home';
-	 *             }
-	 *
-	 *             return $params;
-	 *         }
-	 *     );
-	 *
-	 * To prevent a route from matching, return `FALSE`. To replace the route
-	 * parameters, return an array.
-	 *
-	 * [!!] Default parameters are added before filters are called!
-	 *
-	 * @throws  Kohana_Exception
-	 * @param   array   $callback   callback string, array, or closure
-	 * @return  $this
-	 */
 	public function filter($callback)
 	{
 		if ( ! is_callable($callback))
@@ -167,25 +83,6 @@ class Route {
 		return $this;
 	}
 
-	/**
-	 * Tests if the route matches a given Request. A successful match will return
-	 * all of the routed parameters as an array. A failed match will return
-	 * boolean FALSE.
-	 *
-	 *     // Params: controller = users, action = edit, id = 10
-	 *     $params = $route->matches(Request::factory('users/edit/10'));
-	 *
-	 * This method should almost always be used within an if/else block:
-	 *
-	 *     if ($params = $route->matches($request))
-	 *     {
-	 *         // Parse the parameters
-	 *     }
-	 *
-	 * @param   Request $request  Request object to match
-	 * @return  array             on success
-	 * @return  FALSE             on failure
-	 */
 	public function matches(Request $request)
 	{
 		// Get the URI from the Request
@@ -251,33 +148,11 @@ class Route {
 		return $params;
 	}
 
-	/**
-	 * Returns whether this route is an external route
-	 * to a remote controller.
-	 *
-	 * @return  boolean
-	 */
 	public function is_external()
 	{
 		return ! in_array(Arr::get($this->_defaults, 'host', FALSE), Route::$localhosts);
 	}
 
-	/**
-	 * Generates a URI for the current route based on the parameters given.
-	 *
-	 *     // Using the "default" route: "users/profile/10"
-	 *     $route->uri(array(
-	 *         'controller' => 'users',
-	 *         'action'     => 'profile',
-	 *         'id'         => '10'
-	 *     ));
-	 *
-	 * @param   array   $params URI parameters
-	 * @return  string
-	 * @throws  Kohana_Exception
-	 * @uses    Route::REGEX_GROUP
-	 * @uses    Route::REGEX_KEY
-	 */
 	public function uri(array $params = NULL)
 	{
 		$defaults = $this->_defaults;
