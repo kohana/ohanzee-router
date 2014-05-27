@@ -131,34 +131,5 @@ class Core {
 			return URL::site($route->uri($params), $protocol);
 	}
 
-	public function compile($uri, array $regex = NULL)
-	{
-		// The URI should be considered literal except for keys and optional parts
-		// Escape everything preg_quote would escape except for : ( ) < >
-		$expression = preg_replace('#'.Route::REGEX_ESCAPE.'#', '\\\\$0', $uri);
 
-		if (strpos($expression, '(') !== FALSE)
-		{
-			// Make optional parts of the URI non-capturing and optional
-			$expression = str_replace(array('(', ')'), array('(?:', ')?'), $expression);
-		}
-
-		// Insert default regex for keys
-		$expression = str_replace(array('<', '>'), array('(?P<', '>'.Route::REGEX_SEGMENT.')'), $expression);
-
-		if ($regex)
-		{
-			$search = $replace = array();
-			foreach ($regex as $key => $value)
-			{
-				$search[]  = "<$key>".Route::REGEX_SEGMENT;
-				$replace[] = "<$key>$value";
-			}
-
-			// Replace the default regex with the user-specified regex
-			$expression = str_replace($search, $replace, $expression);
-		}
-
-		return '#^'.$expression.'$#uD';
-	}
 }

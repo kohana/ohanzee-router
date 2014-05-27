@@ -30,6 +30,7 @@
 		"php": ">=5.4.0"
 	},
 	"require-dev": {
-		"phpspec/phpspec": "2.0.*@dev"
-	}
+		"phpspec/phpspec": "dev-develop"
+	},
+	"minimum-stability": "dev"
 }

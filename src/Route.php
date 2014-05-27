@@ -246,5 +246,4 @@ class Route {
 
 		return $uri;
 	}
-
 }

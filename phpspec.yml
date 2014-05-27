@@ -1,0 +1,4 @@
+suites:
+  ohanzee_router_suite:
+    namespace: Ohanzee\Router
+    psr4_prefix: Ohanzee\Router
