@@ -1,4 +1,6 @@
 suites:
-  ohanzee_router_suite:
+  suite:
     namespace: Ohanzee\Router
-    psr4_prefix: Ohanzee\Router
+    src_path: src
+    spec_path: tests
+    spec_prefix: spec
